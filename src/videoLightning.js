@@ -145,7 +145,7 @@
       };
 
       VideoLightning.prototype.buildEls = function() {
-        var bdbg, bdc, bdo, fdim, fglo, fmar, g, wrapCss, xCss;
+        var bdbg, bdc, bdo, fdim, fglo, fmar, g, innerHtml, videoContainerTarget, wrapCss, xCss;
         (this.target = dom.createElement('span')).className = 'video-target';
         this.el.parentNode.insertBefore(this.target, this.el);
         this.target.appendChild(this.el);
@@ -157,7 +157,7 @@
         fglo = "box-shadow: 0px 0px " + (g = _val(this.opts.glow, 20)) + "px " + (g / 5) + "px " + (_fullHex(_val(this.opts.glowColor, '#000'))) + ";";
         wrapCss = _boolify(this.opts.popover, false) ? _wrapCssP(this.opts.width, this.opts.height) : _wrapCss;
         xCss = "background: " + (_fullHex(_val(this.opts.xBgColor, '#000'))) + "; color: " + (_fullHex(_val(this.opts.xColor, '#fff'))) + ";";
-        this.target.insertAdjacentHTML('beforeend', _domStr({
+        innerHtml = _domStr({
           tag: 'div',
           attrs: {
             id: "wrap_" + this.inst,
@@ -200,7 +200,14 @@
               ]
             }
           ]
-        }));
+        });
+        videoContainerTarget = document.querySelector('.video-container');
+        if (videoContainerTarget) {
+          videoContainerTarget.insertAdjacentHTML('afterbegin', innerHtml);
+          dom.getElementById("wrap_" + this.inst).addEventListener('mouseup', this.clicked, false);
+        } else {
+          this.target.insertAdjacentHTML('beforeend', innerHtml);
+        }
         this.wrapper = dom.getElementById("wrap_" + this.inst);
         this.iframe = dom.getElementById("iframe_" + this.inst);
         return this.close = dom.getElementById("close_" + this.inst);

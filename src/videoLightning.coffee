@@ -61,7 +61,7 @@
       #if _boolify(@opts.popover, false)
       xCss = "background: #{_fullHex(_val(@opts.xBgColor, '#000'))}; color: #{_fullHex(_val(@opts.xColor, '#fff'))};"
       #else xCss = 'display: none;'
-      @target.insertAdjacentHTML 'beforeend', _domStr(
+      innerHtml = _domStr(
         tag: 'div'
         attrs:
           id: "wrap_#{@inst}"
@@ -93,6 +93,12 @@
           ]
         ]
       )
+      videoContainerTarget = document.querySelector('.video-container')
+      if videoContainerTarget
+        videoContainerTarget.insertAdjacentHTML 'afterbegin', innerHtml
+        dom.getElementById("wrap_#{@inst}").addEventListener('mouseup', @clicked, false)
+      else
+        @target.insertAdjacentHTML 'beforeend', innerHtml
       @wrapper = dom.getElementById("wrap_#{@inst}")
       @iframe = dom.getElementById("iframe_#{@inst}")
       @close = dom.getElementById("close_#{@inst}")
